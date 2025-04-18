@@ -34,7 +34,7 @@ services:
       env_file:
         - .env
       volumes:
-        - dbdata:/var/lib/mysql
+        - dockerize_dbdata:/var/lib/mysql
       networks:
         - webserver_net
       restart: on-failure
@@ -49,7 +49,6 @@ services:
         - cluster.routing.allocation.disk.threshold_enabled=false
       ports:
         - "9200:9200"
-        - "9300:9300"
       networks:
         - webserver_net
       restart: on-failure
@@ -58,5 +57,16 @@ networks:
   webserver_net:
     driver: bridge
 
+# If you want to use the existing volume like "docerize_dbdata". I know about typos :)
 volumes:
-  dbdata:
+  dockerize_dbdata:
+    external: true
+    name: docerize_dbdata
+
+# you can remove driver_opts directive but if you don't, don't forget to create "device" directory
+#  new_volume_name:
+#    driver: local
+#      driver_opts:
+#        device: /home/${USER}/data/mariadb
+#        o: bind
+#        type: none
