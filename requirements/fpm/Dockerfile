@@ -21,6 +21,7 @@ RUN apt-get update  \
         gnupg \
         default-mysql-client \
         libmcrypt-dev \
+        msmtp \
     && docker-php-source extract \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install -j$(nproc) gd
@@ -51,6 +52,7 @@ RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 COPY ./bin/start.sh /usr/local/bin/start.sh
 COPY ./config/php.ini /usr/local/etc/php/php.ini
 COPY ./config/www.conf /usr/local/etc/php-fpm.d/www.conf
+COPY ./config/msmtprc /etc/msmtprc
 
 RUN chmod +x /usr/local/bin/start.sh
 

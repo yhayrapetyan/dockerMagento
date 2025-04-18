@@ -22,8 +22,8 @@ services:
         - ./src:/var/www/html
       networks:
         - webserver_net
-      environment:
-        MAGE_MODE: ${APP_MAGE_MODE}
+      env_file:
+        - .env
       restart: on-failure
     
     db:
@@ -49,6 +49,18 @@ services:
         - cluster.routing.allocation.disk.threshold_enabled=false
       ports:
         - "9200:9200"
+      networks:
+        - webserver_net
+      restart: on-failure
+
+    mailpit:
+      container_name: mailpit
+      image: axllent/mailpit
+      ports:
+        - "8025:8025"  # Web UI
+        - "1025:1025"
+      env_file:
+        - .env
       networks:
         - webserver_net
       restart: on-failure
