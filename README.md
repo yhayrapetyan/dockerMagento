@@ -1,7 +1,7 @@
 # 🧹 Magento2-Docker Setup Guide
 
 This guide will help you set up a Magento 2 project inside Docker. It assumes you already have a Magento 2 project and want to get it running locally using Docker.
-### The instructions and configurations (especially Nginx) are generally fine, but there might be some cases where errors could occur. If you face any issues, please feel free to open an issue.
+### The instructions and configurations are generally fine, but there might be some cases where errors could occur (especially Nginx). If you face any issues, please feel free to open an issue.
 
 ---
 
@@ -15,7 +15,7 @@ git clone <your-magento-repo-url> ./src
 
 ---
 
-## ⚙️ 2. Configure Your Magento Environment
+## ⚙️ 2. Preconfiguration
 
 Open `src/app/etc/env.php` and update your DB config to match the `.env` file.
 
@@ -26,6 +26,14 @@ The important part is:
 ```
 
 You must use `'db'` as the host—this matches the Docker service name and **won’t work otherwise**.
+
+### ⚠️ Depending on whether you want to use an existing external volume or create a new one, uncomment the appropriate volume section in the docker-compose.yml file.
+### And don't forget to update "db" service
+```yaml
+volumes:
+    - new_volume_name:/var/lib/mysql
+```
+## If you are using existing volume ignore 5 and 6 steps
 
 ---
 
@@ -52,10 +60,7 @@ docker compose up --build
 ```
 
 ---
-
 ## 📂 5. Import Your Database
-
-### 1. Copy the dump file into the `db` container:
 
 ```bash
 docker cp path/to/dump.sql db:/dump.sql
@@ -83,7 +88,8 @@ exit
 
 ## 🔧 6. Update Base URLs and Elasticsearch Host
 
-### Option 1: Run SQL manually
+#### You can do this from inside the `db` container or by connecting to MySQL externally (It'll be much easier).
+### If you want to update from inside `db` container
 ### 1. Enter the `db` container:
 
 ```bash
@@ -100,9 +106,9 @@ mysql -u "$MYSQL_USER" -p
 UPDATE core_config_data SET value = 'https://docker_magento.local' WHERE path = 'web/unsecure/base_url';
 UPDATE core_config_data SET value = 'https://docker_magento.local' WHERE path = 'web/secure/base_url';
 UPDATE core_config_data SET value = 'elasticsearch' WHERE path = 'catalog/search/elasticsearch7_server_hostname';
+UPDATE core_config_data SET value = 'elasticsearch' WHERE path = 'catalog/search/elasticsearch_server_host';
 ```
 
-You can do this from inside the `db` container or by connecting to MySQL externally (It'll be much easier).
 
 
 
