@@ -1,6 +1,7 @@
-# 🧹 Magento Docker Setup Guide
+# 🧹 Magento2-Docker Setup Guide
 
 This guide will help you set up a Magento 2 project inside Docker. It assumes you already have a Magento 2 project and want to get it running locally using Docker.
+### The instructions and configurations (especially Nginx) are generally fine, but there might be some cases where errors could occur. If you face any issues, please feel free to open an issue.
 
 ---
 
@@ -101,16 +102,9 @@ UPDATE core_config_data SET value = 'https://docker_magento.local' WHERE path = 
 UPDATE core_config_data SET value = 'elasticsearch' WHERE path = 'catalog/search/elasticsearch7_server_hostname';
 ```
 
-You can do this from inside the `db` container or by connecting to MySQL externally.
+You can do this from inside the `db` container or by connecting to MySQL externally (It'll be much easier).
 
-### Option 2: Use Magento CLI (inside PHP-FPM container)
 
-```bash
-docker exec -it phpfpm bash
-bin/magento setup:store-config:set --base-url="https://docker_magento.local"
-bin/magento setup:store-config:set --base-url-secure="https://docker_magento.local"
-exit
-```
 
 ---
 
@@ -145,6 +139,12 @@ Mailpit is already configured in the Docker setup to capture outgoing emails for
 To view the emails, open the Mailpit web interface at:  
 http://localhost:8025/
 
+If you want to use another service don't forget to update php.ini
+```
+[mailpit]
+sendmail_path = "/usr/bin/msmtp -t"
+```
+
 ## ✅ 8. Done!
 
 Now visit:
@@ -158,3 +158,15 @@ Make sure your local DNS (like `/etc/hosts`) includes:
 ```
 127.0.0.1 docker_magento.local
 ```
+
+---
+
+### 📌 Possible Problems & Notes
+
+- Sometimes you may need to run the following commands inside the `phpfpm` container:
+  ```bash
+  composer dump-autoload
+  bin/magento setup:static-content:deploy -f
+  ```
+  In the Magento admin panel, some pages (like the products grid) may load slowly or not render completely on the first attempt.
+  If that happens, simply refresh the page to load the data correctly.
