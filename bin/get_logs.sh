@@ -9,6 +9,7 @@ rm -rf "${LOGS_DIR:?}"/*
 docker cp nginx:/var/log/nginx/app-access.log "$LOGS_DIR/"
 docker cp nginx:/var/log/nginx/app-error.log "$LOGS_DIR/"
 docker cp phpfpm:/var/log/app-msmtp.log "$LOGS_DIR/"
+docker cp phpfpm:/var/log/xdebug.log "$LOGS_DIR/"
 
 #docker cp elasticsearch:/var/log/elasticsearch/elasticsearch.log "$LOGS_DIR/"
 #docker cp elasticsearch:/var/log/elasticsearch/elasticsearch-slowlog.log "$LOGS_DIR/"

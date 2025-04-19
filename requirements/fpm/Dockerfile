@@ -22,6 +22,9 @@ RUN apt-get update  \
         default-mysql-client \
         libmcrypt-dev \
         msmtp \
+        libz-dev \
+    && pecl install xdebug  \
+    && docker-php-ext-enable xdebug \
     && docker-php-source extract \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install -j$(nproc) gd

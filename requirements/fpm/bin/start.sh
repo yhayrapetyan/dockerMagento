@@ -8,6 +8,10 @@
 touch /var/log/app-msmtp.log
 chmod a+w /var/log/app-msmtp.log
 
+# Make sure this log file path matches the 'logfile' setting in ../config/php.ini
+touch /var/log/xdebug.log
+chmod a+w /var/log/xdebug.log
+
 [ ! -z "${SERVER_NAME}" ]   && sed -i "s|SERVER_NAME|${SERVER_NAME}|" /etc/msmtprc
 [ ! -z "${MAILPIT_HOST}" ]   && sed -i "s|MAILPIT_HOST|${MAILPIT_HOST}|" /etc/msmtprc
 [ ! -z "${MAILPIT_PORT}" ]   && sed -i "s|MAILPIT_PORT|${MAILPIT_PORT}|" /etc/msmtprc

@@ -150,6 +150,48 @@ If you want to use another service don't forget to update php.ini
 [mailpit]
 sendmail_path = "/usr/bin/msmtp -t"
 ```
+---
+## 🐞 Xdebug Support
+
+Xdebug is enabled **by default** in this environment.  
+If you don’t need it, you can simply disable it in `php.ini` file.
+
+---
+
+### ⚠️ Important Notes for PhpStorm Users
+
+Sometimes PhpStorm may automatically create **incorrect path mappings** — this can cause breakpoints to not be hit or cause the debugger to stop at unexpected places.
+
+#### ✅ Correct Path Mapping
+
+Make sure your path mapping is set correctly:
+
+- ❌ Incorrect: `./src/pub` → `/var/www/html/pub`
+- ✅ Correct: `./src` → `/var/www/html`
+
+To fix this in PhpStorm:
+
+1. Go to **Settings** → `PHP` → `Servers`
+2. Select your server (or create a new one if it's missing)
+3. Ensure the path mapping matches the correct structure
+4. Use the image below for reference:
+
+> ![Path Mapping Example](./images/correct_mappings.png)
+
+---
+
+### 🎯 Xdebug Triggers at Unexpected Files?
+
+If your debugger is stopping in files like `pub/index.php` or `pub/static.php`, and you **didn’t set breakpoints there**, it’s likely due to PhpStorm’s default behavior.
+
+#### Fix:
+
+1. Go to **Settings** → `PHP` → `Debug`
+2. Uncheck ✅ **Break at first line in PHP scripts**
+
+> ![Break at First Line](./images/break_at_first_line.png)
+
+This way, Xdebug will only pause at the breakpoints you actually set.
 
 ## ✅ 8. Done!
 
